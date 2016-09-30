@@ -22,14 +22,13 @@ function getFile(file) {
 }
 
 // request all files at once in "parallel"
-var pr3 = getFile('file3');
-var pr2 = getFile('file2');
-var pr1 = getFile('file1');
-
-pr1.then(console.log).then(function () {
-  return pr2;
-}).then(console.log).then(function () {
-  return pr3;
-}).then(console.log).then(function () {
-  console.log('Complete');
-});
+['file1', 'file2', 'file3']
+.map(getFile)
+  .reduce(function combo(res, pro) {
+    return res.then(function () {
+      return pro;
+    }).then(console.log);
+  }, Promise.resolve())
+  .then(function () {
+    console.log('Complete');
+  });
