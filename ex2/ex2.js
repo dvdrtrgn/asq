@@ -18,19 +18,31 @@ function output(text) {
 }
 
 // **************************************
+var getFile;
 
-function getFile(file) {
+function gf1(file) {
+  return function thunk(cb) {
+    fakeAjax(file, cb);
+  }
+}
+
+function gf2(file) {
   var text, next;
 
-  fakeAjax(file, function (response) {
-    // we want to store response and trigger next step
-    next ? next(response) : (text = response);
-    }
+  fakeAjax(file, function (rz) {
+    next ? next(rz) : (text = rz);
   });
   return function thunk(cb) {
-    // next step cannot be started until ajax is done
     text ? cb(text) : (next = cb);
   };
+}
+
+if (Math.random() > 0.5) {
+  output("concurrent");
+  getFile = gf1;
+} else {
+  output("parallel");
+  getFile = gf2;
 }
 
 // request all files at once in "parallel"
