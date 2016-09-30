@@ -13,10 +13,6 @@ function fakeAjax(url, cb) {
   }, randomDelay);
 }
 
-function output(text) {
-  console.log(text);
-}
-
 // **************************************
 var getFile;
 
@@ -30,33 +26,39 @@ function gf2(file) {
   var text, next;
 
   fakeAjax(file, function (rz) {
-    next ? next(rz) : (text = rz);
+    if (next) {
+      next(rz)
+    } else {
+      console.log('Saving', file);
+      text = rz;
+    }
   });
   return function thunk(cb) {
-    text ? cb(text) : (next = cb);
+    if (text) cb(text)
+    else next = cb;
   };
 }
 
 if (Math.random() > 0.5) {
-  output("concurrent");
+  console.log("concurrent");
   getFile = gf1;
 } else {
-  output("parallel");
+  console.log("parallel");
   getFile = gf2;
 }
 
-// request all files at once in "parallel"
+// request all files "concurrently" or "in parallel"
 var th1 = getFile('file1');
 var th2 = getFile('file2');
 var th3 = getFile('file3');
 
 th1(function (text1) {
-  output(text1);
+  console.log(text1);
   th2(function (text2) {
-    output(text2);
+    console.log(text2);
     th3(function (text3) {
-      output(text3);
-      output('Complete')
+      console.log(text3);
+      console.log('Complete')
     });
   });
 });
