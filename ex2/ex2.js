@@ -20,9 +20,17 @@ function output(text) {
 // **************************************
 
 function getFile(file) {
+  var text, next;
+
+  fakeAjax(file, function (response) {
+    // we want to store response and trigger next step
+    next ? next(response) : (text = response);
+    }
+  });
   return function thunk(cb) {
-    fakeAjax(file, cb);
-  }
+    // next step cannot be started until ajax is done
+    text ? cb(text) : (next = cb);
+  };
 }
 
 // request all files at once in "parallel"
