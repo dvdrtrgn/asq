@@ -13,23 +13,11 @@ function fakeAjax(url, cb) {
   }, randomDelay);
 }
 
-function output(text) {
-  console.log(text);
-}
-
-var cache = {};
-
 // **************************************
 
 function getFile(file) {
-  if (cache[file]) {
-    return Promise.resolve(cache[file]);
-  }
   return new Promise(function (resolve) {
-    fakeAjax(file, function (str) {
-      cache[file] = str;
-      resolve(str);
-    });
+    fakeAjax(file, resolve);
   });
 }
 
@@ -38,11 +26,10 @@ var pr3 = getFile('file3');
 var pr2 = getFile('file2');
 var pr1 = getFile('file1');
 
-pr1
-  .then(console.log).then(function () {
-    return getFile('file2');
-  }).then(console.log).then(function () {
-    return getFile('file3');
-  }).then(console.log).then(function () {
-    console.log('Complete');
-  });
+pr1.then(console.log).then(function () {
+  return pr2;
+}).then(console.log).then(function () {
+  return pr3;
+}).then(console.log).then(function () {
+  console.log('Complete');
+});
