@@ -20,16 +20,15 @@ function output(text) {
 // **************************************
 
 function getFile(file) {
-  return ASQ(function (done) {
+  return new Promise(function (done) {
     fakeAjax(file, done);
   });
 }
 
-// Request all files at once in
-// "parallel" via `getFile(..)`.
-//
-// Render as each one finishes,
-// but only once previous rendering
-// is done.
+var prom = ['file1', 'file2', 'file3'].map(getFile);
 
-// ???
+ASQ().runner(function* () {
+  while (prom.length)
+    yield prom.shift().then(output);
+  output('Complete');
+});
