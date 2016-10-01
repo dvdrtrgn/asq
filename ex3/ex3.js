@@ -13,22 +13,22 @@ function fakeAjax(url, cb) {
   }, randomDelay);
 }
 
+function think(act, ...arg) {
+  return function thunk() {
+    return arg.length ? act.apply(null, arg) : act;
+  };
+}
+
 // **************************************
 
 function getFile(file) {
-  return new Promise(function (resolve) {
+  return new Promise(function exec(resolve) {
     fakeAjax(file, resolve);
   });
 }
 
 // request all files at once in "parallel"
-['file1', 'file2', 'file3']
-.map(getFile)
-  .reduce(function combo(res, pro) {
-    return res.then(function () {
-      return pro;
-    }).then(console.log);
-  }, Promise.resolve())
-  .then(function () {
-    console.log('Complete');
-  });
+['file1', 'file2', 'file3'].map(getFile)
+  .reduce(function (done, prom) {
+    return done.then(think(prom)).then(console.log);
+  }, Promise.resolve()).then(think(console.log, 'Completed'));
