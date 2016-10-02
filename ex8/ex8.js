@@ -8,11 +8,12 @@ function newState(ini) {
   return me;
 }
 
-function newTimer(ms) {
+function newTimer(ms, _fn) {
   var tmr, me = {
     reset: (fn) => {
+      fn = fn || _fn;
       clearTimeout(tmr);
-      tmr = setTimeout(fn || (() => {}), ms);
+      tmr = setTimeout(fn, ms);
     },
   };
   return me;
