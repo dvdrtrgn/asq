@@ -1,11 +1,11 @@
-$(document).ready(function(){
-    var $btn = $("#btn"),
-        $list = $("#list");
+$(document).ready(function () {
+  var $btn = $("#btn"),
+    $list = $("#list");
 
-    $btn.click(/* TODO */);
+  $btn.click( /* TODO */ );
 
-    // Hint: ASQ().runner( .. )
+  // Hint: ASQ().runner( .. )
 
-    // TODO: setup sampling go-routine and
-    // channel, populate $list
+  // TODO: setup sampling go-routine and
+  // channel, populate $list
 });
