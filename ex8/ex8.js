@@ -1,23 +1,22 @@
-$(document).ready(function () {
-  var $btn = $("#btn"),
-    $list = $("#list");
-  var throttle;
-  var clix = ASQ.react.of();
-  var msgs = ASQ.react.of();
-  function output(x) {
-    $list.append(x + '<br>');
-  }
+function output(x) {
+  $("#list").append(x + '<br>');
+}
+var clix = ASQ.react.of();
+var msgs = ASQ.react.of();
+
+$(function () {
+  var $btn = $("#btn");
+  var allow = true;
 
   $btn.click(clix.push);
 
   setInterval(function () {
-    throttle = true;
+    allow = true;
   }, 999);
 
   clix.val(function () {
-    if (throttle) {
-      throttle = false;
-      msgs.push('clicky');
+    if (allow) {
+      allow = !msgs.push('clicky');
     }
   });
 
