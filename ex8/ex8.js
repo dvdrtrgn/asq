@@ -54,3 +54,18 @@ function newTimedState(ini, ms) {
   };
   return me;
 }
+
+function* getState(ini) {
+  var state = ini, tmp, timo;
+  var reset = () => state = ini;
+
+  while (true) {
+    if (tmp !== undefined) {
+      state = tmp;
+      clearTimeout(timo);
+      timo = setTimeout(reset, 999);
+    }
+    tmp = (yield state);
+  }
+}
+var foo = getState(9);
