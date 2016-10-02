@@ -1,8 +1,11 @@
-function newState(x) {
-  return {
-    get: () => x,
-    set: (y) => x = y,
+function newState(ini) {
+  var val = ini;
+  var me = {
+    get: () => val,
+    set: (tmp) => val = tmp,
+    reset: () => me.set(ini),
   };
+  return me;
 }
 function output(x) {
   $("#list").append(x + '<br>');
@@ -17,7 +20,7 @@ $(function () {
   $btn.click(clix.push);
 
   setInterval(function () {
-    allow.set(true);
+    allow.reset();
   }, 999);
 
   clix.val(function () {
