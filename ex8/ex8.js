@@ -1,3 +1,25 @@
+function output(x) {
+  $("#list").append(x + '<br>');
+}
+var clix = ASQ.react.of();
+var msgs = ASQ.react.of();
+
+$(function () {
+  var $btn = $("#btn");
+  var allow = newTimedState(true, 999);
+
+  $btn.click(clix.push);
+
+  clix.val(function () {
+    if (allow.get()) {
+      allow.digress(!msgs.push('clicky'));
+    }
+  });
+
+  msgs.val(output);
+  window.x = msgs;
+});
+
 function newState(ini) {
   var val = ini;
   var me = {
@@ -25,32 +47,10 @@ function newTimedState(ini, ms) {
   var me = {
     get: val.get,
     set: val.set,
-    reset: (tmp) => {
+    digress: (tmp) => {
       val.set(tmp);
       tmr.reset(val.reset);
     },
   };
   return me;
 }
-
-function output(x) {
-  $("#list").append(x + '<br>');
-}
-var clix = ASQ.react.of();
-var msgs = ASQ.react.of();
-
-$(function () {
-  var $btn = $("#btn");
-  var allow = newTimedState(true, 999);
-
-  $btn.click(clix.push);
-
-  clix.val(function () {
-    if (allow.get()) {
-      allow.reset(!msgs.push('clicky'));
-    }
-  });
-
-  msgs.val(output);
-  window.x = msgs;
-});
