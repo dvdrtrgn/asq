@@ -1,3 +1,9 @@
+function newState(x) {
+  return {
+    get: () => x,
+    set: (y) => x = y,
+  };
+}
 function output(x) {
   $("#list").append(x + '<br>');
 }
@@ -6,17 +12,17 @@ var msgs = ASQ.react.of();
 
 $(function () {
   var $btn = $("#btn");
-  var allow = true;
+  var allow = newState(true);
 
   $btn.click(clix.push);
 
   setInterval(function () {
-    allow = true;
+    allow.set(true);
   }, 999);
 
   clix.val(function () {
-    if (allow) {
-      allow = !msgs.push('clicky');
+    if (allow.get()) {
+      allow.set(!msgs.push('clicky'));
     }
   });
 
